@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+    min-width: 180px;
+  }
+  
+  button {
+    margin-top: 10px;
+    width: 100%;
+  }
+  

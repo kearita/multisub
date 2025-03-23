@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "MultiSub",
+    "version": "0.1",
+    "description": "Shows subtitles in multiple languages simultaneously on YouTube",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["https://*.youtube.com/*"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://*.youtube.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
