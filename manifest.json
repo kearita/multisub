@@ -4,7 +4,7 @@
     "version": "0.1",
     "description": "Shows subtitles in multiple languages simultaneously on YouTube",
     "permissions": ["activeTab", "scripting"],
-    "host_permissions": ["https://*.youtube.com/*"],
+    "host_permissions": ["https://*.youtube.com/*", "http://localhost:5000/*"],
     "action": {
       "default_popup": "popup.html"
     },
