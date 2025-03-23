@@ -3,15 +3,24 @@
     "name": "MultiSub",
     "version": "0.1",
     "description": "Shows subtitles in multiple languages simultaneously on YouTube",
-    "permissions": ["activeTab", "scripting"],
-    "host_permissions": ["https://*.youtube.com/*", "http://localhost:5000/*"],
+    "permissions": ["activeTab", "scripting", "tabs"],
+    "host_permissions": ["https://*.youtube.com/*", "http://127.0.0.1:5000/*"],
     "action": {
       "default_popup": "popup.html"
     },
+    "background": {
+      "service_worker": "background.js"
+    },
     "content_scripts": [
+        {
+            "matches": ["https://*.youtube.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [
       {
-        "matches": ["https://*.youtube.com/*"],
-        "js": ["content.js"]
+        "resources": ["subtitles.html"],
+        "matches": ["<all_urls>"]
       }
     ]
   }

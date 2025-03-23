@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(data => {
         if (data.transcription) {
           console.log("Transcription result:", data.transcription);
-          showSubtitles(data.transcription);
+          chrome.runtime.sendMessage({ action: "openSubtitlesTab", text: data.transcription });
         } else {
           console.error("Error:", data.error);
         }
