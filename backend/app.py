@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 ASSEMBLYAI_API_KEY = os.getenv("ASSEMBLYAI_API_KEY")
@@ -11,6 +13,7 @@ TRANSCRIPT_ENDPOINT = "https://api.assemblyai.com/v2/transcript"
 headers = {"authorization": ASSEMBLYAI_API_KEY}
 
 app = Flask(__name__)
+CORS(app)
 
 def upload_audio(audio_path):
     with open(audio_path, "rb") as f:
