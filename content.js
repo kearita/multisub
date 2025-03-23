@@ -25,11 +25,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
       .then(res => res.json())
       .then(data => {
-        if (data.transcription) {
-          console.log("Transcription result:", data.transcription);
-          chrome.runtime.sendMessage({ action: "openSubtitlesTab", text: data.transcription });
+        if (data.original && data.spanish && data.romanian) {
+          console.log("Spanish:", data.spanish);
+          console.log("Romanian:", data.romanian);
+          
+          chrome.runtime.sendMessage({ 
+            action: "openSubtitlesTab", 
+            text: data.original, // or change to data.spanish/romanian
+            spanish: data.spanish,
+            romanian: data.romanian
+          });
         } else {
-          console.error("Error:", data.error);
+          console.error("Error:", data.error || data.message || "Missing fields in response");
         }
       })
       .catch(err => {

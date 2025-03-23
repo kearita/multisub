@@ -3,12 +3,13 @@ from flask_cors import CORS
 import requests
 import os
 from dotenv import load_dotenv
-
+import time
 
 load_dotenv()
 ASSEMBLYAI_API_KEY = os.getenv("ASSEMBLYAI_API_KEY")
 UPLOAD_ENDPOINT = "https://api.assemblyai.com/v2/upload"
 TRANSCRIPT_ENDPOINT = "https://api.assemblyai.com/v2/transcript"
+LIBRETRANSLATE_ENDPOINT = "https://libretranslate.com/translate"
 
 headers = {"authorization": ASSEMBLYAI_API_KEY}
 
@@ -30,8 +31,23 @@ def get_transcription_result(transcript_id):
         response = requests.get(endpoint, headers=headers).json()
         if response['status'] in ('completed', 'error'):
             return response
-        import time
         time.sleep(3)
+
+def translate_text(text, target_lang):
+    url = "http://localhost:8000/translate"
+    payload = {
+        "text": text,
+        "to": target_lang 
+    }
+
+    response = requests.post(url, json=payload)
+    print("Translation response:", response.text)  # for debugging
+
+    try:
+        return response.json()["translatedText"]
+    except KeyError:
+        return f"[Translation failed: {response.text}]"
+
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
@@ -43,9 +59,17 @@ def transcribe():
     result = get_transcription_result(transcript_id)
 
     if result['status'] == 'completed':
-        return jsonify({"transcription": result['text']})
+        original_text = result['text']
+        spanish_translation = translate_text(original_text, 'es')
+        romanian_translation = translate_text(original_text, 'ro')
+
+        return jsonify({
+            "original": original_text,
+            "spanish": spanish_translation,
+            "romanian": romanian_translation
+        })
     else:
-        return jsonify({"error": result['error']}), 400
+        return jsonify({"error": result.get('error', 'Transcription failed')}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
